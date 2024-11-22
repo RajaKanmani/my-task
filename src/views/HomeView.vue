@@ -29,7 +29,12 @@
           <p class="amount-p">Converted to</p>
           <div class="card flex">
             <div>
-              <input type="text" class="card-input" v-model="convertItem.value" />
+              <input
+                type="text"
+                class="card-input"
+                v-model="convertItem.value"
+                disabled
+              />
             </div>
             <div>
               <AppDropdown
