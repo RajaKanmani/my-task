@@ -69,7 +69,10 @@
         <template v-if="getContryName(item.id)">
           <div class="flex">
             <div class="section-two-left">
-              <p class="section-two-list-p">{{ getContryName(item.id) }} ( {{ item.id }})</p>
+              <p class="section-two-list-p flex">
+                <span><img :src="getFlag(item.id)" class="selected-flag" /></span>
+                {{ getContryName(item.id) }} ( {{ item.id }})
+              </p>
             </div>
             <div class="section-two-right">
               <p class="section-two-list-p">{{ item.value }}</p>
@@ -199,6 +202,12 @@ const getContryName = (code) => {
   const item = countriesList.value.find((list) => list.short_code === code)
   return item ? item.name : null
 }
+
+const getFlag = (code) => {
+  const data = code.split('')
+  const shortCode = data[0] + data[1]
+  return 'https://flagsapi.com/' + shortCode + '/flat/64.png'
+}
 </script>
 
 <style scoped>
@@ -258,5 +267,11 @@ input:focus {
   display: block;
   height: 1px;
   margin: 10px 0px;
+}
+.selected-flag {
+  width: 17px;
+  margin-right: 0px;
+  height: 22px;
+  margin-right: 10px;
 }
 </style>
