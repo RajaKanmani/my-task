@@ -80,119 +80,118 @@
   </main>
 </template>
 <script setup>
-import AppDropdown from "../components/AppDropdown.vue";
-import AppTwoWayIcon from "../components/icons/AppTwoWayIcon.vue";
-import { ref, onMounted, computed } from "vue";
-import axios from "axios";
-const pageLoading = ref(true);
-const searchValue = ref("");
-const countriesList = ref([]);
-const selectedValueFrom = ref("");
-const selectedOnlineValue = ref("");
-const selectedValueTo = ref("");
-const baseURL = ref("https://api.currencybeacon.com/v1");
-const fromShortCode = ref("USD");
-const toShortCode = ref("AUD");
-const amount = ref("10000");
-const convertItem = ref({});
-const onlineRateList = ref([]);
-const cloneOnlineRateList = ref([]);
+import AppDropdown from '../components/AppDropdown.vue'
+import AppTwoWayIcon from '../components/icons/AppTwoWayIcon.vue'
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+const pageLoading = ref(true)
+const searchValue = ref('')
+const countriesList = ref([])
+const selectedValueFrom = ref('')
+const selectedOnlineValue = ref('')
+const selectedValueTo = ref('')
+const baseURL = ref('https://api.currencybeacon.com/v1')
+const fromShortCode = ref('USD')
+const toShortCode = ref('AUD')
+const amount = ref('10000')
+const convertItem = ref({})
+const onlineRateList = ref([])
+const cloneOnlineRateList = ref([])
 
 const localFilterList = computed(() => {
   return countriesList.value.filter(
     (list) =>
-      list.short_code &&
-      list.short_code.toLowerCase().includes(searchValue.value.toLowerCase())
-  );
-});
+      list.short_code && list.short_code.toLowerCase().includes(searchValue.value.toLowerCase()),
+  )
+})
 
 onMounted(async () => {
-  pageLoading.value = true;
-  selectedValueFrom.value = fromShortCode.value;
-  selectedValueTo.value = toShortCode.value;
-  await getDefaultCurrency();
-  await localIndex();
-  await loadLatestOnlineRate();
-  pageLoading.value = false;
-});
+  pageLoading.value = true
+  selectedValueFrom.value = fromShortCode.value
+  selectedValueTo.value = toShortCode.value
+  await getDefaultCurrency()
+  await localIndex()
+  await loadLatestOnlineRate()
+  pageLoading.value = false
+})
 
 const getDefaultCurrency = async () => {
   await axios
-    .get(baseURL.value + "/convert", {
+    .get(baseURL.value + '/convert', {
       params: {
-        api_key: "1SMxQumaAcC996SUXGsnlBPW44t2RR82",
+        api_key: '1SMxQumaAcC996SUXGsnlBPW44t2RR82',
         from: fromShortCode.value,
         to: toShortCode.value,
         amount: amount.value,
       },
     })
     .then((response) => {
-      convertItem.value = { ...response.data };
-    });
-};
+      convertItem.value = { ...response.data }
+    })
+}
 
 const convertShortCode = async (type, code) => {
-  if (type === "from") fromCode(code);
-  if (type === "to") toCode(code);
-  await getDefaultCurrency();
-};
+  if (type === 'from') fromCode(code)
+  if (type === 'to') toCode(code)
+  await getDefaultCurrency()
+}
 
 const getOnlineReateCode = async (type = null, code) => {
-  selectedOnlineValue.value = code;
-  const list = cloneOnlineRateList.value.filter((list) => list.id === code);
-  onlineRateList.value = list;
-};
+  selectedOnlineValue.value = code
+  const list = cloneOnlineRateList.value.filter((list) => list.id === code)
+  onlineRateList.value = list
+}
 
 const fromCode = async (code) => {
-  selectedValueFrom.value = code;
-  fromShortCode.value = code;
-};
+  selectedValueFrom.value = code
+  fromShortCode.value = code
+}
 
 const toCode = async (code) => {
-  selectedValueTo.value = code;
-  toShortCode.value = code;
-};
+  selectedValueTo.value = code
+  toShortCode.value = code
+}
 
 const searchCurrencies = async (value) => {
-  searchValue.value = value;
-};
+  searchValue.value = value
+}
 
 const localIndex = async () => {
   await axios
-    .get(baseURL.value + "/currencies", {
-      params: { api_key: "1SMxQumaAcC996SUXGsnlBPW44t2RR82" },
+    .get(baseURL.value + '/currencies', {
+      params: { api_key: '1SMxQumaAcC996SUXGsnlBPW44t2RR82' },
     })
     .then((response) => {
-      dataCovert(response.data);
-    });
-};
+      dataCovert(response.data)
+    })
+}
 
 const loadLatestOnlineRate = async () => {
   await axios
-    .get(baseURL.value + "/latest", {
-      params: { api_key: "1SMxQumaAcC996SUXGsnlBPW44t2RR82" },
+    .get(baseURL.value + '/latest', {
+      params: { api_key: '1SMxQumaAcC996SUXGsnlBPW44t2RR82' },
     })
     .then((response) => {
-      onlineRateCovert(response.data.rates);
-    });
-};
+      onlineRateCovert(response.data.rates)
+    })
+}
 
 const dataCovert = async (data) => {
-  const list = [];
+  const list = []
   for (const [key, value] of Object.entries(data)) {
-    list.push(data[key]);
+    list.push(data[key])
   }
-  countriesList.value = list;
-};
+  countriesList.value = list
+}
 
 const onlineRateCovert = async (data) => {
-  const list = [];
+  const list = []
   for (const [key, value] of Object.entries(data)) {
-    list.push({ id: key, value: value });
+    list.push({ id: key, value: value })
   }
-  onlineRateList.value = list;
-  cloneOnlineRateList.value = list;
-};
+  onlineRateList.value = list
+  cloneOnlineRateList.value = list
+}
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <div @click="visible = !visible" class="cursor">
       <div class="flex">
         <img :src="getFlag(selectedValue)" class="selected-flag" v-if="selectedValue" />
-        <p class="text">{{ selectedValue ? selectedValue : "All Contries" }}</p>
+        <p class="text">{{ selectedValue ? selectedValue : 'All Contries' }}</p>
         <div style="margin: 14px 10px"><AppArrowDown /></div>
       </div>
     </div>
@@ -21,10 +21,7 @@
         <div v-for="item in list" :key="item.id">
           <div class="flex">
             <div class="text cursor flex" @click="select(item.short_code)">
-              <img
-                :src="getFlag(item.short_code)"
-                style="width: 17px; margin-right: 9px"
-              />
+              <img :src="getFlag(item.short_code)" style="width: 17px; margin-right: 9px" />
               {{ item.short_code }}
             </div>
             <div class="selected-icon" v-if="item.short_code === selectedValue">
@@ -38,12 +35,12 @@
 </template>
 
 <script setup>
-import { ref, toRefs } from "vue";
-import AppTickIcon from "./icons/AppTickIcon.vue";
-import AppArrowDown from "./icons/AppArrowDown.vue";
+import { ref, toRefs } from 'vue'
+import AppTickIcon from './icons/AppTickIcon.vue'
+import AppArrowDown from './icons/AppArrowDown.vue'
 
-const visible = ref(false);
-const searchValue = ref("");
+const visible = ref(false)
+const searchValue = ref('')
 
 const props = defineProps({
   list: {
@@ -52,30 +49,30 @@ const props = defineProps({
   },
   selectedValue: {
     type: String,
-    default: "AUD",
+    default: 'AUD',
   },
   type: {
     type: String,
     default: null,
   },
-});
-const { type, list } = toRefs(props);
-const emit = defineEmits(["updateShortCode", "search"]);
+})
+const { type, list } = toRefs(props)
+const emit = defineEmits(['updateShortCode', 'search'])
 
 const search = async () => {
-  emit("search", searchValue.value);
-};
+  emit('search', searchValue.value)
+}
 
 const select = async (selectValue) => {
-  visible.value = false;
-  emit("updateShortCode", type.value, selectValue);
-};
+  visible.value = false
+  emit('updateShortCode', type.value, selectValue)
+}
 
 const getFlag = (code) => {
-  const data = code.split("");
-  const shortCode = data[0] + data[1];
-  return "https://flagsapi.com/" + shortCode + "/flat/64.png";
-};
+  const data = code.split('')
+  const shortCode = data[0] + data[1]
+  return 'https://flagsapi.com/' + shortCode + '/flat/64.png'
+}
 </script>
 
 <style scoped>
